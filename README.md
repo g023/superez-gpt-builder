@@ -4,15 +4,15 @@ SuperEZ-GPT Builder is a powerful and user-friendly jQuery AI Content Building A
 
 ## Features
 
-- **Easy Content Generation**: With SuperEZ-GPT Builder, you can generate content using a combination of HTML, jQuery, and the OpenAI GPT API. No complex coding or technical expertise required.
+- **Easy Content Generation**: With SuperEZ-GPT Builder, you can generate content using various AI settings, such as temperature, maximum tokens, prompts, revising prompts.
 
 - **Customizable Prompts**: Tailor your prompts to automatically generate titles, page descriptions, keywords, tags, and more. This feature saves you time and effort by automating the content creation process.
 
-- **Local Execution**: SuperEZ-GPT Builder can be run locally on your machine, eliminating the need for an internet connection (except for the OpenAI API connection). This ensures that you have full control over your content generation process.
+- **Local Execution**: SuperEZ-GPT Builder can be run locally on your machine, eliminating the need for an internet server. This makes it easy to access this application from a variety of devices.
 
 - **Prompt Management**: Save and load your prompts to files or cookies, allowing you to easily reuse and modify them for future content generation tasks. This feature enhances productivity and streamlines your workflow.
 
-- **Content Preservation**: Save and load your content generations to files, enabling you to store and access your generated content whenever needed. This functionality ensures that your content is securely stored and readily available.
+- **Content Preservation**: Save and load your content generations to files, enabling you to store and access your generated content whenever needed. This functionality ensures that your content is easily stored and readily available.
 
 - **Flexible API Key Management**: The OpenAI API key is stored in a local variable and can be set via the footer on page load. This allows you to easily manage and update your API key without modifying the code.
 
