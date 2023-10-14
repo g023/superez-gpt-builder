@@ -28,7 +28,7 @@ SuperEZ-GPT Builder is a powerful and user-friendly jQuery AI Content Building A
 
 ## Usage
 
-1. Include the necessary HTML, jQuery, and JavaScript files in your project.
+1. Run superez-gpt-builder.html in your browser. (Uses a jQuery CDN)
 2. Set your OpenAI API key in the footer of your HTML file.
 3. Customize the prompts, max tokens, temperature, and model as needed.
 4. Run the program locally and start generating content effortlessly.
