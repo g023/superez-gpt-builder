@@ -1,0 +1,206 @@
+<!-- program: SuperEZ-GPT Builder: jQuery AI Content Building Assistant -->
+<!-- file: superez-gpt-builder.html -->
+<!-- license: BSD 3-Clause -->
+<!-- version 1.0 -->
+
+<!-- a jquery gpt api content builder -->
+<!-- helps to build some content for webpages, social media, etc using nothing more than html, jquery and the openai gpt api -->
+<!-- You can tweak some prompts to automatically generate title, page descriptions, keywords, tags, etc for content generation -->
+<!-- You can run entire thing locally (aside from openai api connection), as it uses jquery and javascript to make connections and display data -->
+<!-- You can save/load your prompts to files, or cookies -->
+<!-- You can save/load your content generations to files -->
+<!-- OpenAI API key is stored in a local variable. Set via footer on page load -->
+<!-- You can tweak the max tokens, temperature, and model used for each prompt -->
+<!-- Prompts are sent asynchronously. There is a cooldown of 5 seconds between sends from a single button. -->
+<!-- Context given in floating header bar is appended to a prompt for generation -->
+<!-- the context(.the-context) is accessed in the revision prompt via the tag {CONTEXT} -->
+<!-- the generated content (.the-output) is accessed in the revision prompt via the tag {CONTENT} -->
+<!-- more fields can be added or removed in superez-gpt-builder.template.layout.js -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SuperEZ-GPT Builder: jQuery AI Content Building Assistant</title>
+
+        <!-- keywords: SuperEZ-GPT-builder, jQuery, AI, Webpage Content Builder, Assistant -->
+        <meta name="description" content="A jQuery AI Webpage Content Builder Assistant. Helps to build the content of a webpage using nothing more than html, jquery and the openai gpt api.">
+        <meta name="keywords" content="SuperEZ-GPT-builder, jQuery, AI, Webpage Content Builder, Assistant">
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+        <script src="./_inc.js/superez-gpt-builder.cookie.js"></script>
+        <script src="./_inc.js/superez-gpt-builder.template.js"></script>
+        <script src="./_inc.js/superez-gpt-builder.template.layout.js"></script>
+        <script src="./_inc.js/superez-gpt-builder.gptapi.js"></script>
+        <script src="./_inc.js/superez-gpt-builder.saveload.prompts.js"></script>
+        <script src="./_inc.js/superez-gpt-builder.saveload.content.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="superez-gpt-builder.css">
+    </head>
+<body>
+
+    <h2 class='title'>SuperEZ-GPT-builder : A Javascript/jQuery AI Webpage Content Builder Assistant</h2>
+
+    <div class='fields-container'></div>
+
+    <div class='d-context'>
+        <input id="prompt the-context" class='the-gpt-context' type="text" placeholder="Enter a context that will be appended to generation prompt or embedded in revision prompt.">
+    </div>
+
+    <div class='d-footer'>
+        <div class='d-footer-container'>
+            <div class='row-fld'><input id="the-aikey" type="password" placeholder="Enter your OpenAI API key here."></div>
+            <div class='row-btn'><button id="the-aikey-btn" class='btn'>set api key</button></div>
+        </div>
+    </div>
+
+    <script>
+        // OUTPUT -> AI rows (gpt-field)
+        draw_fields(fields, '.fields-container');
+    </script>
+
+<br><br><br><br>
+
+    <!-- BEGIN: our saving/loading of prompts and content data -->
+
+    <!-- clear prompts button -->
+    <script>
+        $(function() {
+            $('#clear-prompts-btn').on('click', function() {
+                $('.gpt-field').each(function() {
+                    $(this).find('.the-prompt').val('');
+                    $(this).find('.the-revise-prompt').val('');
+                });
+            });
+        });
+    </script>
+    <button id="clear-prompts-btn">clear prompts</button>
+
+    
+
+    <!-- BEGIN:save/load prompts from file  -->
+    <h2>Save/Load Prompts</h2>
+    <button id="download-prompts-result">download prompts</button><!-- download data as json file -->
+    <input type="file" id="load-prompts-file" />
+    <button id="load-prompts-btn">upload prompts</button>
+    
+    <!-- END:save/load prompts from file  -->
+    <!-- BEGIN:save/load prompts from cookie (jquery) -->
+    <button class='btn-save-to-cookie'>Save Prompts to Cookie</button>
+    <button class='btn-load-from-cookie'>Load Prompts from Cookie</button>
+    <br><br>
+    <!-- END:save/load prompts from cookie  -->
+
+    <!-- BEGIN:saving/loading content (.the-output) to/from json file -->
+
+    <br><br>
+    <h2>Save/Load Content Data</h2>
+    <button id="save-data-btn">download data</button>
+    <input type="file" id="load-data-file" />
+    <button id="load-data-btn">upload data</button>
+    <br><br>
+
+    <br><br><br><br><br><br>
+
+    <!-- BEGIN: The technical meat and potatoes. -->
+
+    <!-- a javascript/jquery gpt class -->
+    <script>
+
+    // begin.
+    g_apiKey = '';
+    g_GPT = new ChatGPTClient(g_apiKey);
+
+    // new way with gpt-field
+    $('.gpt-field').each(function() {
+        const fld = $(this).attr('fld');
+        const update_class      = '.gpt-field[fld="'+fld+'"] .the-output';
+        const get_btn_class    = '.gpt-field[fld="'+fld+'"] .get-btn';
+        const temp_class        = '.gpt-field[fld="'+fld+'"] .temp';
+
+        const rev_btn_class     = '.gpt-field[fld="'+fld+'"] .revise-btn';
+
+        // when we click the get-btn (async function)
+        $(get_btn_class).click(async () => {
+
+            if($(this).find('.get-btn').hasClass('disabled'))
+                return;
+
+            $(this).find('.get-btn').addClass('disabled');
+
+            console.log('clicked');
+
+            context     = $('body').find('.the-gpt-context').val();
+            prompt      = $(this).find('.the-prompt').val();
+            console.log('prompt:', prompt+context);
+
+            messages    = [{ role: 'user', content: prompt+context }];
+            max_tokens  = parseInt($(this).find('.max-tokens').val());
+            model       = $(this).find('.model-dropdown').val();
+            temperature = parseFloat($(temp_class).val()); // get the slider value
+            console.log('model:', model);
+            console.log('temp:',        temperature);
+            console.log('max tokens:',  max_tokens);
+
+            // were not done yet cowboy, await a response
+            await get_response(model,messages,temperature,max_tokens, update_class);
+
+            // restore
+            $(this).find('.get-btn').removeClass('disabled');
+        });
+
+        // when we click the revise-btn (async function)
+        $(rev_btn_class).click(async () => {
+
+            if($(this).find('.revise-btn').hasClass('disabled'))
+                return;
+
+            $(this).find('.revise-btn').addClass('disabled');
+
+            console.log('clicked');
+
+            context     = $('body').find('.the-gpt-context').val();
+            content     = $(this).find('.the-output').val();
+            prompt      = $(this).find('.the-revise-prompt').val();
+            // replace {CONTENT} with content and {CONTEXT} with context
+            prompt      = prompt.replace('{CONTEXT}', context);
+            prompt      = prompt.replace('{CONTENT}', content);
+            console.log('prompt:', prompt);
+
+
+            // TODO: this section is redundant ->
+            messages    = [{ role: 'user', content: prompt }];
+            max_tokens  = parseInt($(this).find('.max-tokens').val());
+            model       = $(this).find('.model-dropdown').val();
+            temperature = parseFloat($(temp_class).val()); // get the slider value
+            console.log('model:', model);
+            console.log('temp:', temperature);
+            console.log('max tokens:', max_tokens);
+            // were not done yet cowboy, await a response
+            await get_response(model,messages,temperature,max_tokens, update_class);
+            // END: <- redundant section
+
+            // restore
+            $(this).find('.revise-btn').removeClass('disabled');
+        });
+
+    });
+
+
+    // when we click the the-aikey-btn we set the api key for current window. (at moment just storing in a global variable)
+    $(function() {
+        $('#the-aikey-btn').click(function() {
+            var key = $('#the-aikey').val();
+            g_apiKey = key;
+            g_GPT = new ChatGPTClient(g_apiKey);
+            alert('API key set.');
+            // blank field
+            $('#the-aikey').val('');
+        });
+    });    
+
+    </script>
+
+
+</body>
+</html>

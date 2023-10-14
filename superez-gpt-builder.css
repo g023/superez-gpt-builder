@@ -1,0 +1,246 @@
+
+body {
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+h2 {
+    display:block;
+    margin-top:2.5em;
+    text-align:center;
+}
+
+
+h2.title {
+    font-family: 'Roboto', sans-serif;
+    font-weight:normal;
+    letter-spacing:0.03em;
+}
+
+/* Container for the entire row */
+.gpt-field {
+display: flex;
+flex-wrap: wrap;
+justify-content: space-between;
+background-color: #f2f2f2;
+max-width: 100%;
+box-sizing: border-box;
+}
+
+.gpt-field .d-label {
+width:100%;
+text-align:left;
+padding:0.3em;
+margin-left:1em;
+margin-top:0.7em;
+}
+
+.gpt-field .d-config select {
+width: 100%;
+max-width: 100%;
+border: none;
+border-radius: 5px;
+padding: 10px;
+box-sizing: border-box;
+background-color: #fff; /* White background for text areas */
+margin-bottom: 10px;
+}
+
+.gpt-field .d-config label {
+display: block;
+margin-bottom: 5px;
+}
+
+/* Alternating section colors */
+.gpt-field:nth-child(odd) {
+background-color: #ccc;
+}
+
+.gpt-field:nth-child(even) {
+background-color: #eee;
+}
+
+/* Adjustments for mobile */
+@media (max-width: 768px) {
+.gpt-field {
+flex-direction: column;
+align-items: center;
+}
+
+/* Reset background colors for mobile */
+/*
+.gpt-field:nth-child(odd),
+.gpt-field:nth-child(even) {
+background-color: #f2f2f2;
+}
+*/
+}
+
+/* Prompt section */
+.d-prompt {
+flex: 1;
+margin: 10px;
+border-radius: 5px;
+padding: 10px;
+text-align: center;
+background-color: #ffe6b3;
+}
+
+/* Output section */
+.d-output {
+flex: 1;
+margin: 10px;
+border-radius: 5px;
+padding: 10px;
+text-align: center;
+background-color: #ffb3d9;
+}
+
+/* Configuration section */
+.d-config {
+flex: 1;
+margin: 10px;
+border-radius: 5px;
+padding: 10px;
+text-align: center;
+background-color: #80aaff;
+}
+
+/* Label styles */
+.label {
+font-weight: bold;
+}
+
+/* Textarea and input styles */
+.the-prompt,
+.the-revise-prompt,
+.the-output,
+.max-tokens,
+.temp {
+width: 100%;
+max-width: 100%;
+border: none;
+border-radius: 5px;
+padding: 10px;
+box-sizing: border-box;
+background-color: #fff; /* White background for text areas */
+}
+
+/* Button styles */
+.btn {
+width: 100%;
+padding: 10px;
+border: none;
+border-radius: 5px;
+background-color: #3399ff;
+color: #fff;
+cursor: pointer;
+font-weight: bold;
+margin-bottom:2px;
+margin-top:2px;
+}
+
+/* Button hover effect */
+.btn:hover {
+background-color: #0052cc;
+}
+
+
+
+.d-context {
+    position:fixed;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    top:0;
+    left:0;
+    width:100%;
+    height:3em;
+    background-color:rgba(0,0,0,0.5);
+    z-index:1000;
+
+}
+
+.d-context input {
+    width:80%;
+    max-width:80%;
+    border:none;
+    border-radius:0px;
+    padding:10px;
+    box-sizing:border-box;
+    background-color:#fff; /* White background for text areas */
+}
+
+
+
+
+
+
+.d-footer {
+    position:fixed;
+    bottom:0px; left:0px;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color:rgba(0,0,0,0.7);
+    text-align:center;
+    margin:0px;padding:0px;
+    border-top:3px solid #fff;
+}
+
+.d-footer-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align:center;
+}
+
+.d-footer-container div {
+    margin:10px;
+}
+
+.d-footer-container .row-fld {
+    flex-grow: 1;
+    margin-right:20px;
+}
+
+.d-footer-container .row-btn {
+    flex-grow: 1;
+}
+
+
+
+.d-footer input {
+    color:#aaa;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    width: 100%;
+    margin-top:2px;
+
+}
+
+.d-footer button {
+    width:100%;
+
+}
+
+
+
+
+
+
+
+
+.disabled {
+    background-color: #222;
+    color:#444;
+}
+
+.disabled:hover {
+    background-color: #222;
+    color:#444;
+}
