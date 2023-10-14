@@ -18,7 +18,7 @@ SuperEZ-GPT Builder is a powerful and user-friendly jQuery AI Content Building A
 
 - **Customizable Generation Settings**: Adjust the max tokens, temperature, and model used for each prompt to fine-tune the content generation process according to your specific requirements. This level of customization ensures that you get the desired output.
 
-- **Asynchronous Prompt Sending**: Prompts are sent asynchronously, ensuring smooth and efficient content generation. A cooldown of 5 seconds is implemented between sends from a single button, preventing any potential API rate limit issues.
+- **Asynchronous Prompt Sending**: Prompts are sent asynchronously, ensuring smooth and efficient content generation. A cooldown of 5 seconds is implemented between sends from a single button, in an attempt to prevent potential API rate limit issues.
 
 - **Contextual Generation**: The context given in the floating header bar is appended to a prompt for generation. This feature allows you to provide additional context to the AI model, resulting in more accurate and contextually relevant content.
 
